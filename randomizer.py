@@ -26,6 +26,7 @@ class Randomizer:
 		self.playerCount = 0
 		self.finalFactions = []
 		self.finalMap = ''
+		self.includeExpansion = False
 
 
 	def drawFaction(self):
@@ -56,23 +57,36 @@ class Randomizer:
 
 
 	def askPlayerCount(self):
-		self.playerCount = int(input('Wie viele Spieler nehmen Teil?\n'))
+		self.playerCount = int(input('How many players to participate?\n'))
 		if self.playerCount > 7:
 			self.playerCount = 7
 			print('Cannot take more than 7 players! Assume 7 players.\n')
 		elif self.playerCount < 1:
 			self.playerCount = 1
 			print('Cannot take less than 1 player! Assume 1 player.\n')
+	
+	def askExpansion(self):
+		include = 'yes'
+		newInclude = input('Do you want to include the expansion factions?')
+		if len(newInclude) > 0:
+			include = newInclude
+		if include.lower()[0] == 'n':
+			self.excludeExpansion()
+		
 		
 	def printResults(self):
-		print('RESULT\n')
+		print('\nRESULT\n')
 		print('Map - '+ self.finalMap + ' \n')
 		for i in range(self.playerCount):
 			print('Player ' + str(i+1) + ' : ' + self.finalFactions[i].name + ' ' + self.finalFactions[i].color +'\n')
-			
+	
+	def excludeExpansion(self):
+		for i in range(6):
+			self.factions.pop(-1)
 	
 	def run(self):
 		self.askPlayerCount()
+		self.askExpansion()
 		self.finalMap = random.choice(self.maps)
 		for i in range(self.playerCount):
 			self.findValidFaction()
